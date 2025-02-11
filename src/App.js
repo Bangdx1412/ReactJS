@@ -8,19 +8,31 @@ const courses = [
 ];
 function App() {
   // One way byding
-  const [checked, setChecked] = useState(2);
+  const [checked, setChecked] = useState([]);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    console.log({ ids: checked });
+  };
   console.log(checked);
-
+  const handleCheck = (id) => {
+    setChecked((prev) => {
+      const isChecked = checked.includes(id);
+      if (isChecked) {
+        // Uncheck
+        return checked.filter((item) => item !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
   return (
     <div style={{ padding: "20px" }}>
       {courses.map((cour) => (
         <div key={cour.id}>
           <input
-            type="radio"
-            checked={checked === cour.id}
-            onChange={() => setChecked(cour.id)}
+            type="checkbox"
+            checked={checked.includes(cour.id)}
+            onChange={() => handleCheck(cour.id)}
           />
           {cour.name}
         </div>
