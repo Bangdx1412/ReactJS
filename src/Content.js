@@ -16,8 +16,8 @@ import { useEffect, useState } from "react";
  -F8 blog title
  2. Call API
  3. Listen DOM Events
-  - Scroll
-  - Resize
+  - Scroll (Sự kiện cuộn trang)
+  - Resize (Sự kiện thay đổi kích thước màn hình)
  4. Cleanup
  - Remove listener / Unsuubscribe
  - Clear timer 
@@ -34,12 +34,14 @@ import { useEffect, useState } from "react";
 // ----------------------
 
 // 1. Callback luôn được gọi Sau khi component mounted
+// 2. Cleanup function sẽ được gọi trước khi component bị unmounted
 
 const tabs = ["posts", "comments", "albums"];
 function Content() {
   const [title, setTitle] = useState("");
   const [posts, setPosts] = useState([]);
   const [type, setType] = useState("posts");
+  const [showButton, setShowButton] = useState(false);
   useEffect(() => {
     fetch(`https://jsonplaceholder.typicode.com/${type}`)
       .then((res) => res.json())
@@ -47,6 +49,25 @@ function Content() {
         setPosts(posts);
       });
   }, [type]);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 200) {
+        // Hien nut button
+        setShowButton(true);
+      } else {
+        // An nut button
+        setShowButton(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    console.log("add");
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      console.log("remove");
+    };
+  }, []);
   return (
     <div>
       {tabs.map((tab) => (
@@ -64,6 +85,11 @@ function Content() {
           <li key={post.id}>{post.title}</li>
         ))}
       </ul>
+      {showButton && (
+        <button style={{ position: "fixed", right: 20, bottom: 20 }}>
+          Go to top
+        </button>
+      )}
     </div>
   );
 }
