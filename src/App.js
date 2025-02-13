@@ -1,43 +1,43 @@
 import { useState } from "react";
 
-// Response tu API tra ve
-const courses = [
-  { id: 1, name: "HTML,CSS" },
-  { id: 2, name: "Js" },
-  { id: 3, name: "Reactjs" },
-];
 function App() {
-  // One way byding
-  const [checked, setChecked] = useState([]);
+  const [list, setList] = useState("");
+  const [lists, setLists] = useState(() => {
+    // json.parse để chuyển thành mảng
+    const localLists = JSON.parse(localStorage.getItem("list"));
+    return localLists ?? [];
+  });
 
   const handleSubmit = () => {
-    console.log({ ids: checked });
+    setLists((prev) => {
+      const newLists = [...prev, list];
+      //  chuyển thành chuỗi json và lưu vào localStorage
+      const jsonList = JSON.stringify(newLists);
+      localStorage.setItem("list", jsonList);
+
+      return newLists;
+    });
+    setList("");
   };
-  console.log(checked);
-  const handleCheck = (id) => {
-    setChecked((prev) => {
-      const isChecked = checked.includes(id);
-      if (isChecked) {
-        // Uncheck
-        return checked.filter((item) => item !== id);
-      } else {
-        return [...prev, id];
-      }
+  const handleDelete = (id) => {
+    setLists((prev) => {
+      const updatedLists = prev.filter((_, i) => i !== id);
+      localStorage.setItem("list", JSON.stringify(updatedLists));
+      return updatedLists;
     });
   };
   return (
-    <div style={{ padding: "20px" }}>
-      {courses.map((cour) => (
-        <div key={cour.id}>
-          <input
-            type="checkbox"
-            checked={checked.includes(cour.id)}
-            onChange={() => handleCheck(cour.id)}
-          />
-          {cour.name}
-        </div>
-      ))}
-      <button onClick={handleSubmit}>Register</button>
+    <div style={{ padding: 32 }}>
+      <input value={list} onChange={(e) => setList(e.target.value)} />
+      <button onClick={handleSubmit}>Add</button>
+      <ul>
+        {lists.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => handleDelete(index)}>Xoa</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
