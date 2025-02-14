@@ -37,20 +37,17 @@ import { useEffect, useState } from "react";
 // 2. Cleanup function sẽ được gọi trước khi component bị unmounted
 
 function Content() {
-  const [chieuDai, setChieuDai] = useState(window.innerWidth);
-
+  const [countdown, setcountdown] = useState(180);
   useEffect(() => {
-    const hanldeResize = () => {
-      setChieuDai(window.innerWidth);
-    };
-    window.addEventListener("resize", hanldeResize);
-
-    return () => {
-      window.removeEventListener("resize", hanldeResize);
-    };
+    setInterval(() => {
+      setcountdown((prevDown) => prevDown - 1);
+    }, 1000);
   }, []);
-
-  return <div>{chieuDai}</div>;
+  return (
+    <div>
+      <h1>{countdown}</h1>
+    </div>
+  );
 }
 
 export default Content;
