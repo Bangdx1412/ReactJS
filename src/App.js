@@ -1,12 +1,24 @@
-// Mounted / Unmounted
 import { useState } from "react";
+
 import Content from "./Content";
+// 1.memo()-> Higher Order Component (HOC)
+//  2. useCallback()
+
+// Hooks
+// HOC
+// Render props
+
 function App() {
-  const [show, setShow] = useState(false);
+  const [count, setCount] = useState(0);
+
+  const increase = () => {
+    setCount(count + 1);
+  };
   return (
-    <div style={{ padding: 32 }}>
-      <button onClick={() => setShow(!show)}>Tonggo</button>
-      {show && <Content />}
+    <div>
+      <Content />
+      <h1>{count}</h1>
+      <button onClick={increase}>Click me!</button>
     </div>
   );
 }
