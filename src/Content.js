@@ -37,19 +37,23 @@ import { useEffect, useState } from "react";
 // 2. Cleanup function sẽ được gọi trước khi component bị unmounted
 // 3. Cleanup function luôn được gọi trước khi callback được gọi(trừ lần mounted đầu)
 function Content() {
-  const [countdown, setcountdown] = useState(180);
+  const [avatar, setAvatar] = useState();
   useEffect(() => {
-    const timeDown = setInterval(() => {
-      setcountdown((prevDown) => prevDown - 1);
-    }, 1000);
-
     return () => {
-      clearInterval(timeDown);
+      avatar && URL.revokeObjectURL(avatar.preview);
     };
-  }, []);
+  }, [avatar]);
+  const hendlePrecviewAvatar = (e) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    console.log(file);
+
+    setAvatar(file);
+  };
   return (
     <div>
-      <h1>{countdown}</h1>
+      <input type="file" onChange={hendlePrecviewAvatar} />
+      {avatar && <img src={avatar.preview} width="80%" />}
     </div>
   );
 }
