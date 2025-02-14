@@ -35,13 +35,17 @@ import { useEffect, useState } from "react";
 
 // 1. Callback luôn được gọi Sau khi component mounted
 // 2. Cleanup function sẽ được gọi trước khi component bị unmounted
-
+// 3. Cleanup function luôn được gọi trước khi callback được gọi(trừ lần mounted đầu)
 function Content() {
   const [countdown, setcountdown] = useState(180);
   useEffect(() => {
-    setInterval(() => {
+    const timeDown = setInterval(() => {
       setcountdown((prevDown) => prevDown - 1);
     }, 1000);
+
+    return () => {
+      clearInterval(timeDown);
+    };
   }, []);
   return (
     <div>
