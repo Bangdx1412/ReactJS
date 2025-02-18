@@ -4,8 +4,6 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import { StoreProvider } from "./store";
-
 // console.log(React);
 // Fake comments
 // function emitComment(id) {
@@ -24,9 +22,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
 
-  <StoreProvider>
-    <App />
-  </StoreProvider>
+  <App />
 
   // </React.StrictMode>
 );
